@@ -1,0 +1,86 @@
+<style type="text/css">
+.header {
+  background: #8a8a8a;
+}
+.header .columns {
+  padding-bottom: 0;
+}
+.header p {
+  color: #fff;
+  margin-bottom: 0;
+}
+.header .wrapper-inner {
+  padding: 20px; /*controls the height of the header*/
+}
+.header .container {
+  background: #8a8a8a;
+}
+.wrapper.secondary {
+  background: #f3f3f3;
+}
+.primary{
+    text-align: center!important;
+}
+</style>
+<!-- move the above styles into your custom stylesheet -->
+
+
+<container>
+
+  <spacer size="16"></spacer>
+
+  <row>
+    <columns small="12" style="text-align: center;">
+      <h1 id="name">Hi, {{name}}</h1>
+      <callout style="text-align: center;" class="primary">
+        <p>Thanks for using our service, bring this ticket to staff in our cinema </p>
+        <h2>Your ticket : </h2>
+        <img id="imgCodeQR" src={{codeQR}} style="width: 100px; height: 100px" />
+        <h2>Phim : </h2>
+        <h3 style="color: red;">{{filmName}}</h3>
+        <h2>Thời gian chiếu : </h2>
+        <p>{{showtimes}}</p>
+        <h2>Rạp chiếu phim : </h2>
+        <p>{{cinema}}</p>
+        <h2>Địa chỉ : </h2>
+        <p>{{address}}</p>
+        <h2>Ghế : </h2>
+        <p>{{seatName}}</p>
+        <h2>Rạp : </h2>
+        <p>{{theater}}</p>
+        <h2>Combo :</h2>
+        {{combo}}
+      </callout>
+
+    </columns>
+  </row>
+  
+  <wrapper class="secondary" style="text-align: center;">
+    <spacer size="16"></spacer>
+    <row>
+      <columns small="12" large="6">
+        <h5>Contact Info:</h5>
+        <p>Phone: 408-341-0600</p>
+        <p>Email: <a href="longnguyenngocthanh99@gmail.com">foundation@zurb.com</a></p>
+      </columns>
+    </row>
+  </wrapper>
+  <div id="canvas">
+  </div>
+      
+  <center>
+    <menu>
+      <item href="#">Terms</item>
+      <item href="#">Privacy</item>
+      <item href="#">Unsubscribe</item>
+    </menu>
+  </center>
+
+</container>
+
+<script>
+  const name = document.getElementById("name").textContent
+  console.log(name)
+  const qrCode = document.getElementById("qrCode").textContent;
+  document.getElementById("imgCodeQR").src = qrCode
+</script>

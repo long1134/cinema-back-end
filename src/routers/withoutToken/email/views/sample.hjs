@@ -1,0 +1,62 @@
+<style type="text/css">
+.header {
+  background: #8a8a8a;
+}
+.header .columns {
+  padding-bottom: 0;
+}
+.header p {
+  color: #fff;
+  margin-bottom: 0;
+}
+.header .wrapper-inner {
+  padding: 20px; /*controls the height of the header*/
+}
+.header .container {
+  background: #8a8a8a;
+}
+.wrapper.secondary {
+  background: #f3f3f3;
+}
+</style>
+<!-- move the above styles into your custom stylesheet -->
+
+
+<container>
+
+  <spacer size="16"></spacer>
+
+  <row>
+    <columns small="12">
+      <h1>Hi, {{name}}</h1>
+      <callout class="primary">
+        <p>Welcome {{name}} to become our member, get you ticket and watch your favourite movie</p>
+      </callout>
+
+    </columns>
+  </row>
+  
+  <wrapper class="secondary">
+    <spacer size="16"></spacer>
+    <row>
+      <columns small="12" large="6">
+        <h5>Contact Info:</h5>
+        <p>Phone: 408-341-0600</p>
+        <p>Email: <a href="mailto:foundation@zurb.com">foundation@zurb.com</a></p>
+      </columns>
+    </row>
+  </wrapper>
+      
+  <center>
+    <menu>
+      <item href="#">Terms</item>
+      <item href="#">Privacy</item>
+      <item href="#">Unsubscribe</item>
+    </menu>
+  </center>
+
+</container>
+
+<script>
+  console.log(name)
+</script>
