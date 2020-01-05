@@ -1,53 +1,58 @@
 const mongoose = require("mongoose")
 
 const showtimes = new mongoose.Schema({
-    idTheater:{
-        type : mongoose.Schema.Types.ObjectId,
-        required : true
+    idTheater: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     },
-    idFilm:{
-        type : mongoose.Schema.Types.ObjectId,
-        required : true
+    idFilm: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     },
-    idCinema:{
-        type : mongoose.Schema.Types.ObjectId,
-        required : true
+    idCinema: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true
     },
-    dayShow : {
-        type :String,
-        required : true
+    dayShow: {
+        type: String,
+        required: true
     },
-    timeShow : {
-        type : String,
-        required : true
+    timeShow: {
+        type: String,
+        required: true
     },
-    tickets : {
-        type : Number,
-        default : 0
+    map: {
+        type: Array,
+        required: true
     },
-    combo : {
-        type : Array,
-        default : []
+    status: {
+        type: Boolean,
+        default: true
     },
-    detailTickets : {
-        type : Array,
-        default : []
+    tickets: {
+        type: Number,
+        default: 0
     },
-    revenueCombo : {
-        type : Number,
-        default:0
+    combo: {
+        type: Array,
+        default: []
     },
-    revenueTickets : {
-        type : Number,
-        default:0
+    detailTickets: {
+        type: Array,
+        default: []
     },
-    revenue : {
-        type : Number,
-        default : '0'
+    revenueCombo: {
+        type: Number,
+        default: 0
     },
-    map : {
-        type : Array,
-    }
+    revenueTickets: {
+        type: Number,
+        default: 0
+    },
+    revenue: {
+        type: Number,
+        default: '0'
+    },
 })
 
 module.exports = showtimes

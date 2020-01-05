@@ -11,23 +11,24 @@ const upload = multer({
     }
 })
 
-module.exports = router =>{
-    router.post("/",upload.any(), async(req,res)=>{
-        try{
+module.exports = router => {
+    router.post("/", upload.any(), async (req, res) => {
+        try {
             let img1 = ""
             let img2 = ""
-            await mongoose.model("img").create({img:req.files[0].buffer}).then(data=>{
+            await mongoose.model("img").create({ img: req.files[0].buffer }).then(data => {
                 img1 = data._id
             })
-            await mongoose.model("img").create({img:req.files[1].buffer}).then(data=>{
+            await mongoose.model("img").create({ img: req.files[1].buffer }).then(data => {
                 img2 = data._id
             })
-            const movies = await mongoose.model("film").create({...req.body, 
-                img1:img1,
-                img2:img2
+            const movies = await mongoose.model("film").create({
+                ...req.body,
+                img1: img1,
+                img2: img2
             })
             return res.status(200).send(movies)
-        }catch(e){
+        } catch (e) {
             return res.status(500).send(e)
         }
     })

@@ -1,72 +1,72 @@
 const mongoose = require("mongoose")
 const JWT = require("jsonwebtoken")
 const freeze = require("deep-freeze")
-const {sendPayEmail, sendWelcomeEmail} = require('../email/index')
+const { sendPayEmail, sendWelcomeEmail } = require('../email/index')
 
-module.exports = router =>{
-    router.put("/pay/:id",async (req,res)=>{
-        try{
+module.exports = router => {
+    router.put("/pay/:id", async (req, res) => {
+        try {
             //update showtimes from 0 -> 1
             let showtimes = {}
             showtimes = await mongoose.model("showtimes").findById(req.params.id)
-            const frezzeBody = {...req.body.showtimes}
+            const frezzeBody = { ...req.body.showtimes }
             // console.log(frezzeBody)
-            let ticket =  {
-                idShowtimes : req.params.id,
-                seatName : req.body.detailSeats.join(", "),
-                price : frezzeBody.revenue,
-                foodsDetail : frezzeBody.combo,
-                seatsDetail : frezzeBody.detailTickets
+            let ticket = {
+                idShowtimes: req.params.id,
+                seatName: req.body.detailSeats.join(", "),
+                price: frezzeBody.revenue,
+                foodsDetail: frezzeBody.combo,
+                seatsDetail: frezzeBody.detailTickets
             }
-            
+
             await mongoose.model("ticket").create({
                 ...ticket
-            }).then(data=> {
+            }).then(data => {
                 ticket = data
             }).catch(
-                error=>console.log(error)
+                error => console.log(error)
             )
-            // console.log(ticket)
+            console.log(req.body)
             // console.log(req.body.showtimes)
-            var decoded =  await JWT.verify(req.body.token,"token")
+            var decoded = await JWT.verify(req.body.token, "token")
             let member = await mongoose.model("member").findById(decoded._id)
             let temp = member.tickets
             temp = temp.push(ticket._id)
-            let updateMember = await mongoose.model("member").findByIdAndUpdate(decoded._id,{tickets :[...member.tickets], point : (ticket.price/1000+member.point)})
+            let updateMember = await mongoose.model("member").findByIdAndUpdate(decoded._id, { tickets: [...member.tickets], point: (ticket.price / 1000 + member.point) })
             // console.log(updateMember)
             let cinema = await mongoose.model("cinema").findById(showtimes.idCinema)
             let theater = await mongoose.model("theater").findById(showtimes.idTheater)
             let showCombo = ""
-            for(let i in frezzeBody.combo){
+            for (let i in frezzeBody.combo) {
                 showCombo += frezzeBody.combo[i].name + ` : ${frezzeBody.combo[i].detail}  (${frezzeBody.combo[i].count}),`
             }
-            sendPayEmail(req.body.filmName, member.email, member.name,showtimes.timeShow  , ticket.seatName,showCombo,cinema.name,cinema.address, theater.name, ticket._id)
+            sendPayEmail(req.body.filmName, member.email, member.name, showtimes.timeShow, ticket.seatName, showCombo, cinema.name, cinema.address, theater.name, ticket._id)
             // console.log(cinema)
-            let newShowtimes = {...req.body.showtimes}
-            let oldShowtimes =  await mongoose.model("showtimes").findById(req.params.id)
-            let tempTicket = newShowtimes.detailTickets.map(ticket=>ticket.name)
-            let tempCombo = newShowtimes.combo.map(combo=>combo.name)
+            let newShowtimes = { ...req.body.showtimes }
+            let oldShowtimes = await mongoose.model("showtimes").findById(req.params.id)
+            let tempTicket = newShowtimes.detailTickets.map(ticket => ticket.name)
+            let tempCombo = newShowtimes.combo.map(combo => combo.name)
             newShowtimes.tickets = oldShowtimes.tickets
-            oldShowtimes.detailTickets.map(oldTicket=>{
-                if(tempTicket.indexOf(oldTicket.name) === -1){
+            oldShowtimes.detailTickets.map(oldTicket => {
+                if (tempTicket.indexOf(oldTicket.name) === -1) {
                     newShowtimes.detailTickets.push(oldTicket)
                 }
                 else
-                    newShowtimes.detailTickets.map(newTicket=>{
-                        if(newTicket.name === oldTicket.name){
+                    newShowtimes.detailTickets.map(newTicket => {
+                        if (newTicket.name === oldTicket.name) {
                             newTicket.count += oldTicket.count
                             newTicket.total += newTicket.total
                         }
                         return newTicket
                     })
             })
-            oldShowtimes.combo.map(oldCombo=>{
-                if(tempCombo.indexOf(oldCombo.name) === -1){
+            oldShowtimes.combo.map(oldCombo => {
+                if (tempCombo.indexOf(oldCombo.name) === -1) {
                     newShowtimes.combo.push(oldCombo)
                 }
                 else
-                    newShowtimes.combo.map(newCombo=>{
-                        if(newCombo.name === oldCombo.name){
+                    newShowtimes.combo.map(newCombo => {
+                        if (newCombo.name === oldCombo.name) {
                             newCombo.count += oldCombo.count
                             newCombo.total += oldCombo.total
                         }
@@ -78,12 +78,21 @@ module.exports = router =>{
             newShowtimes.revenue += showtimes.revenue
             newShowtimes.revenueCombo += showtimes.revenueCombo
             // console.log(newShowtimes)
-            await mongoose.model("showtimes").findByIdAndUpdate(req.params.id,{
+            await mongoose.model("showtimes").findByIdAndUpdate(req.params.id, {
                 ...newShowtimes
             })
             // console.log(newShowtimes)
             return res.status(200).send(showtimes)
-        }catch(e){
+        } catch (e) {
+            return res.status(500).send(e)
+        }
+    });
+    router.put("/pay", async (req, res) => {
+        try {
+            console.log(req.body)
+            return res.status(200).send(req.body)
+        }
+        catch (e) {
             return res.status(500).send(e)
         }
     })
